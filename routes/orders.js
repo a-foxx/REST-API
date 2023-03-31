@@ -15,13 +15,14 @@ const getOrders = (req, res) => {
 
 // post order
 const createOrder = (req, res) => {
-    const {id, total, status, created, modified, userid} = req.body;
+    //foreign key userid, cart_id
+    const {total, status, created, modified, user_id, cart_id} = req.body;
     console.log(req.body);
     pool.query(
-        `INSERT INTO orders (id, total, status, created, modified, userid)
+        `INSERT INTO orders (total, status, created, modified, user_id, cart_id)
         VALUES (
             $1, $2, $3, $4, $5, $6
-        ) RETURNING *;`, [id, total, status, created, modified, userid], (err, result) => {
+        ) RETURNING *;`, [total, status, created, modified, user_id, cart_id], (err, result) => {
             if (err) {
                 throw err;
             }
@@ -37,7 +38,7 @@ const createOrder = (req, res) => {
 const deleteOrder = (req, res) => {
     const orderId = req.params.id;
     pool.query(
-        `DELETE FROM orders WHERE id = $1`, [orderId], (err, result) => {
+        `DELETE FROM orders WHERE order_id = $1`, [orderId], (err, result) => {
             if (err) {
                 throw err;
             }
@@ -50,10 +51,11 @@ const deleteOrder = (req, res) => {
 
 // update order
 const updateOrder = (req, res) => {
-    const {total, status, created, modified, userid} = req.body;
-    const id = req.params.id;
+    //cartid added???
+    const orderId = req.params.id;
+    const {total, status, created, modified, user_id, cart_id} = req.body;
     pool.query(
-        `UPDATE orders SET total = $1, status = $2, created = $3, modified = $4, userid = $5 WHERE id = $6;`, [total, status, created, modified, userid, id], 
+        `UPDATE orders SET total = $1, status = $2, created = $3, modified = $4, user_id = $5, cart_id = $6 WHERE order_id = $7;`, [total, status, created, modified, user_id, cart_id, orderId], 
         (err, result) => {
             if (err) {
                 throw err;

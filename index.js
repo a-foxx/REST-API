@@ -5,6 +5,7 @@ const port = 3000;
 const user = require('./routes/users')
 const products = require('./routes/products')
 const orders = require('./routes/orders')
+const cart = require('./routes/cart')
 
 
 app.use(cors())
@@ -18,7 +19,6 @@ app.use(
 
 app.get('/', (req, res) => {
   res.send('Hello World');
-  
 });
 
 
@@ -41,7 +41,10 @@ app.delete('/deleteorder/:id', orders.deleteOrder)
 app.put('/updateorder/:id', orders.updateOrder)
 
 /*cart*/
-// app.get('/cart')
+app.get('/cart', cart.getCart)
+app.post('/addtocart', cart.addToCart)
+app.delete('/deletecart/:id', cart.deleteCart)
+app.put('/updatecart/:id', cart.updateCart)
 
 
 app.listen(port, () => console.log(`Example backend API listening on port ${port}!`))
